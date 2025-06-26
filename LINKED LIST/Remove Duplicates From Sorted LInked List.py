@@ -11,3 +11,19 @@ class Solution:
                 prev.next=curr.next
             curr=curr.next
         return head
+    #second soln
+def removeDuplicates(head):
+    prev=None
+    curr=head
+    while curr:
+        forward=curr.next
+        if prev is None:
+            prev=curr
+            curr=forward
+            continue
+        if curr.data==prev.data:# if two nodes are duplicate then remove it 
+            prev.next=forward
+            curr=forward
+        else:          #if two nodes are not duplicate advance forward
+            prev=curr
+            curr=forward
