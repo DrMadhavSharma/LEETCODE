@@ -1,0 +1,61 @@
+class Node:
+    def __init__(self, data):  # Fix: typo in def__init__
+        self.data = data
+        self.next = None       # Fix: should be None, not 'next'
+
+def quickSort(head):
+    if head is None or head.next is None:
+        return head
+
+    pivot = head
+    curr = head
+
+    # Dummy nodes for less, equal, and greater partitions
+    left_dummy = Node(0)
+    equal_dummy = Node(0)
+    right_dummy = Node(0)
+
+    # Tail pointers for each partition
+    left_tail = left_dummy
+    equal_tail = equal_dummy
+    right_tail = right_dummy
+
+    # Partitioning the list
+    while curr:
+        if curr.data < pivot.data:
+            left_tail.next = curr
+            left_tail = curr
+        elif curr.data == pivot.data:  # Fix: '=' replaced with '=='
+            equal_tail.next = curr
+            equal_tail = curr
+        else:
+            right_tail.next = curr
+            right_tail = curr
+        curr = curr.next
+
+    # Important: close the ends to avoid incorrect linking
+    left_tail.next = None
+    equal_tail.next = None
+    right_tail.next = None
+
+    # Recursively sort left and right partitions
+    left_sorted = quickSort(left_dummy.next)
+    right_sorted = quickSort(right_dummy.next)
+
+    # Join all three parts together
+    return concatenate(left_sorted, equal_dummy.next, right_sorted)
+
+
+def concatenate(left, mid, right):
+    dummy = Node(0)
+    tail = dummy
+
+    # Attach left → mid → right
+    for part in [left, mid, right]:
+        while part:            # Fix: you missed this loop
+            tail.next = part
+            tail = part
+            part = part.next
+
+    tail.next = None
+    return dummy.next
